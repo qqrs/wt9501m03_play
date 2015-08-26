@@ -22,11 +22,17 @@ byte CMD_PLAY_INVALID[] = {0x7E, 0x07, 0xA0, 0x39, 0x39, 0x39, 0x39, 0x39, 0x7E}
 byte CMD_VOLUME_MAX[] = {0x7E, 0x03, 0xA4, 0x19, 0x7E};
 byte CMD_VOLUME_MIN[] = {0x7E, 0x03, 0xA4, 0x00, 0x7E};
 byte CMD_VOLUME_HALF[] = {0x7E, 0x03, 0xA4, 0x0C, 0x7E};
-byte CMD_VOLUME_PREF[] = {0x7E, 0x03, 0xA4, 0x12, 0x7E};
+byte CMD_VOLUME_ONE_FOURTH[] = {0x7E, 0x03, 0xA4, 0x07, 0x7E};
+byte CMD_VOLUME_THREE_FOURTHS[] = {0x7E, 0x03, 0xA4, 0x12, 0x7E};
 
 byte CMD_LOOP_NONE[] = {0x7E, 0x02, 0xA7, 0x7E};
-byte CMD_LOOP_SINGLE[] = {0x7E, 0x02, 0xA8, 0x7E};
-byte CMD_LOOP_ALL[] = {0x7E, 0x02, 0xA9, 0x7E};
+byte CMD_LOOP_SINGLE[] = {0x7E, 0x02, 0xA9, 0x7E};
+byte CMD_LOOP_ALL[] = {0x7E, 0x02, 0xA8, 0x7E};
+
+byte CMD_PAUSE[] = {0x7E, 0x02, 0xA1, 0x7E};
+byte CMD_NEXT[] = {0x7E, 0x02, 0xA6, 0x7E};
+byte CMD_PREV[] = {0x7E, 0x02, 0xA5, 0x7E};
+
 
 enum input_state_t {
   ST_READY,
@@ -47,9 +53,6 @@ void setup() {
   bank[1] = '0';
 
   mp3_send_cmd(CMD_VOLUME_MAX);
-  /*mp3_send_cmd(CMD_LOOP_ALL);*/
-  /*mp3_send_cmd(CMD_PLAY_FIRST);*/
-  /*mp3_send_cmd(CMD_PLAY_INVALID);*/
 }
 
 void loop() {
@@ -107,13 +110,18 @@ void handle_keypress(char key) {
 
 void handle_keypress_func(char key) {
   switch (key) {
-    case '0': mp3_send_cmd(CMD_VOLUME_MIN);   break;
-    case '1': mp3_send_cmd(CMD_VOLUME_HALF);  break;
-    case '2': mp3_send_cmd(CMD_VOLUME_PREF);  break;
-    case '3': mp3_send_cmd(CMD_VOLUME_MAX);   break;
+    case '0': mp3_send_cmd(CMD_PAUSE);           break;
 
-    case '7': mp3_send_cmd(CMD_LOOP_NONE);    break;
-    case '8': mp3_send_cmd(CMD_LOOP_SINGLE);  break;
-    case '9': mp3_send_cmd(CMD_LOOP_ALL);     break;
+    case '1': mp3_send_cmd(CMD_VOLUME_HALF);            break;
+    case '2': mp3_send_cmd(CMD_VOLUME_THREE_FOURTHS);   break;
+    case '3': mp3_send_cmd(CMD_VOLUME_MAX);             break;
+    case '4': mp3_send_cmd(CMD_VOLUME_ONE_FOURTH);      break;
+
+    case '5': mp3_send_cmd(CMD_PREV);    break;
+    case '6': mp3_send_cmd(CMD_NEXT);    break;
+
+    case '7': mp3_send_cmd(CMD_LOOP_NONE);      break;
+    case '8': mp3_send_cmd(CMD_LOOP_SINGLE);    break;
+    case '9': mp3_send_cmd(CMD_LOOP_ALL);       break;
   }
 }
